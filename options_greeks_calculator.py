@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import streamlit as st
 
 def option_price_projection(S, K, r, T, sigma, delta, gamma, theta, vega):
@@ -16,10 +17,10 @@ def option_price_projection(S, K, r, T, sigma, delta, gamma, theta, vega):
     projected_price_lower_iv = max(0, projected_price_down - iv_change)
 
     return {
-        "Projected Price (Stock Up)": projected_price_up,
-        "Projected Price (Stock Down)": projected_price_down,
-        "Projected Price (IV Up)": projected_price_higher_iv,
-        "Projected Price (IV Down)": projected_price_lower_iv,
+        "Stock Up": projected_price_up,
+        "Stock Down": projected_price_down,
+        "IV Up": projected_price_higher_iv,
+        "IV Down": projected_price_lower_iv,
         "Time Decay Impact": time_decay,
     }
 
@@ -42,14 +43,5 @@ if st.sidebar.button("Calculate"):
     st.subheader("Projected Option Prices")
     
     # Improved Display with Table Format
-    st.write("### Option Price Projections")
-    st.table({
-        "Scenario": ["Stock Up", "Stock Down", "IV Up", "IV Down", "Time Decay Impact"],
-        "Projected Price": [
-            f"{projections['Projected Price (Stock Up)']:.2f}",
-            f"{projections['Projected Price (Stock Down)']:.2f}",
-            f"{projections['Projected Price (IV Up)']:.2f}",
-            f"{projections['Projected Price (IV Down)']:.2f}",
-            f"{projections['Time Decay Impact']:.2f}"
-        ]
-    })
+    df = pd.DataFrame(list(projections.items()), columns=["Scenario", "Projected Price"])
+    st.table(df)
