@@ -40,5 +40,16 @@ vega = st.sidebar.number_input("Vega", value=0.10)
 if st.sidebar.button("Calculate"):
     projections = option_price_projection(S, K, r, T, sigma, delta, gamma, theta, vega)
     st.subheader("Projected Option Prices")
-    for key, value in projections.items():
-        st.write(f"{key}: {value:.2f}")
+    
+    # Improved Display with Table Format
+    st.write("### Option Price Projections")
+    st.table({
+        "Scenario": ["Stock Up", "Stock Down", "IV Up", "IV Down", "Time Decay Impact"],
+        "Projected Price": [
+            f"{projections['Projected Price (Stock Up)']:.2f}",
+            f"{projections['Projected Price (Stock Down)']:.2f}",
+            f"{projections['Projected Price (IV Up)']:.2f}",
+            f"{projections['Projected Price (IV Down)']:.2f}",
+            f"{projections['Time Decay Impact']:.2f}"
+        ]
+    })
